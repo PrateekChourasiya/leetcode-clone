@@ -36,7 +36,7 @@ const userSchema = new Schema({
         default: "user"
     },
     problemSolved: {
-        type: [string],
+        type: [String],
     }
 }, {timestamps: true})
 
