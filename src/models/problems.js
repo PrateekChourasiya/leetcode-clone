@@ -68,7 +68,19 @@ const problemSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true
-    }
+    },
+    referenceSolution: [
+        {
+            language: {
+                type: String,
+                required: true,
+            },
+            completeCode: {
+                type: String,
+                required: true
+            }
+        }
+    ]
 })
 
 const Problem = mongoose.model('problem', problemSchema);
