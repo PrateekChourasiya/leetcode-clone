@@ -44,6 +44,14 @@ const userSchema = new Schema({
     }
 }, {timestamps: true})
 
+// await Submission.deleteMany({userId}); instead of this in userController deleteProfile controller, below command is written
+
+userSchema.post('findOneAndDelete', async function (userInfo) {
+    if (userInfo) {
+        await mongoose.model('submission').deleteMany({userId: userInfo._id});
+    }
+});
+
 const User = mongoose.model("user", userSchema);
 
 module.exports = User;

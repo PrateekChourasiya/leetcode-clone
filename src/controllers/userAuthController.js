@@ -1,4 +1,5 @@
 const redisClient = require('../config/redis');
+const Submission = require('../models/submission');
 const User = require('../models/user');
 const validate = require('../utils/validator');
 const bcrypt = require('bcrypt');
@@ -96,5 +97,24 @@ const adminRegister = async (req, res) => {
     }
 }
 
+const deleteProfile = async (req, res) => {
+    try{
+        const userId = req.result._id;
 
-module.exports = {register, login, logout, adminRegister};
+        // delete user from the user schema
+        await User.findByIdAndDelete(userId);
+
+        // delete all submissions of the user in submission schema
+        // await Submission.deleteMany({userId}); -: this same this can be done using userSchema.post method written in userSchema whnever findByIdAndDelete is exexuted, and findByIdAndDelete is a mongoose command which relate to findOneAndDelete in mongodb
+
+        res.status(200).send("User Deleted Successfully");
+
+    }
+    catch(err){
+        res.status(500).send("Error: "+err);
+    }
+    
+}
+
+
+module.exports = {register, login, logout, adminRegister, deleteProfile};
