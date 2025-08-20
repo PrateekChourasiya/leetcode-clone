@@ -36,17 +36,13 @@ const problemSchema = new Schema({
             }
         }
     ],
-    hiddenVisibleTestCases: [
+    hiddenTestCases: [
         {
             input: {
                 type: String,
                 required: true
             },
             output: {
-                type: String,
-                required: true,
-            },
-            explanation: {
                 type: String,
                 required: true,
             }

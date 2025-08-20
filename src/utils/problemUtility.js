@@ -3,8 +3,8 @@ const axios = require("axios");
 const getLanguageById = (lang) => {
   const languages = {
     "c++": 54,
-    java: 62,
-    javascript: 63,
+    "java": 62,
+    "javascript": 63,
   };
 
   return languages[lang.toLowerCase()];
@@ -18,7 +18,7 @@ const submitBatch = async (submissions) => {
       base64_encoded: "false",
     },
     headers: {
-      "x-rapidapi-key": "1a491de574msh0b9060c6c44cebcp174be6jsn53fb60f4675d",
+      "x-rapidapi-key": process.env.JUDGE0_KEY,
       "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
       "Content-Type": "application/json",
     },
@@ -55,7 +55,7 @@ const submitTokens = async (resultTokens) => {
       fields: "*",
     },
     headers: {
-      "x-rapidapi-key": "1a491de574msh0b9060c6c44cebcp174be6jsn53fb60f4675d",
+      "x-rapidapi-key": process.env.JUDGE0_KEY,
       "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
     },
   };
