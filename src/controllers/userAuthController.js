@@ -24,9 +24,10 @@ const register = async (req, res) => {
             firstName: user.firstName,
             emailId: user.emailId,
             _id: user._id,
+            role: user.role,
         };
 
-        res.cookie('token', token, {maxAge: 60*60*100}); // here maxAge takes time in miliseconds, so we gave time accordingly
+        res.cookie('token', token, {maxAge: 60*60*1000}); // here maxAge takes time in miliseconds, so we gave time accordingly
         res.status(201).json({
             user: reply,
             meassage: "user registered successfully."
@@ -60,10 +61,11 @@ const login = async (req, res) => {
             firstName: user.firstName,
             emailId: user.emailId,
             _id: user._id,
+            role: user.role,
         };
 
         const token = jwt.sign({_id: user._id, emailId: emailId, role:user.role}, process.env.JWT_KEY, {expiresIn: 60*60});
-        res.cookie('token', token, {maxAge: 60*60*100});
+        res.cookie('token', token, {maxAge: 60*60*1000});
 
         res.status(201).json({
             user: reply,
@@ -108,7 +110,7 @@ const adminRegister = async (req, res) => {
         const user = await User.create(req.body);
 
         const token = jwt.sign({_id: user._id, emailId: emailId, role:user.role}, process.env.JWT_KEY, {expiresIn: 60*60}); // expiresIn takes time in seconds, so we gave 1 hr
-        res.cookie('token', token, {maxAge: 60*60*100}); // here maxAge takes time in miliseconds, so we gave time accordingly
+        res.cookie('token', token, {maxAge: 60*60*1000}); // here maxAge takes time in miliseconds, so we gave time accordingly
         res.status(201).json("User Registered Successfully");
 
     }catch(err){

@@ -7,11 +7,13 @@ const submitCode = async (req, res) => {
         const userId = req.result._id;
         const problemId = req.params.id;
 
-        const { code, language } = req.body;
+        let { code, language } = req.body;
 
         if (!userId || !code || !problemId || !language) {
             return res.status(400).send("Some fields are missing");
         }
+
+        if(language === 'cpp') language = 'c++'; // for frontend code editor i.e monaco, as it accepts cpp and our problemSchma hai c++
 
         // fetch the problem db
 
@@ -86,7 +88,14 @@ const submitCode = async (req, res) => {
             await req.result.save();
         }
 
-        res.status(200).send(solutionSubmitResult);
+        const accepted = (status == 'accepted');
+        res.status(201).json({
+            accepted,
+            totalTestCases: solutionSubmitResult.testCasesTotal,
+            passedTestCases: casesPassed,
+            runtime,
+            memory
+        });
 
     } 
     catch (err) { 
@@ -99,13 +108,15 @@ const runCode = async (req, res) => {
         const userId = req.result._id;
         const problemId = req.params.id;
 
-        const { code, language } = req.body;
+        let { code, language } = req.body;
 
         if (!userId || !code || !problemId || !language) {
             return res.status(400).send("Some fields are missing");
         }
 
         // fetch the problem db
+
+        if(language === 'cpp') language = 'c++'; // for frontend code editor i.e monaco, as it accepts cpp and our problemSchma hai c++
 
         const problem = await Problem.findById(problemId);
 
@@ -126,7 +137,37 @@ const runCode = async (req, res) => {
 
         const testResult = await submitTokens(resultTokens);
 
-        res.status(200).send(testResult);
+        let casesPassed = 0;
+        let runtime = 0;
+        let memory = 0;
+        let status = true;
+        let errorMessage = null;
+
+
+        for(const test of testResult){
+            if(test.status_id == 3){
+                casesPassed++;
+                runtime += parseFloat(test.time);
+                memory = Math.max(memory, test.memory);
+            }
+            else{
+                if(test.status_id == 4){
+                    status = false;
+                    errorMessage = test.stderr;
+                }
+                else{
+                    status = false;
+                    errorMessage = test.stderr;
+                }
+            }
+        }
+
+        res.status(200).json({
+            success: status,
+            testCases: testResult,
+            runtime,
+            memory
+        });
     }
     catch(err){
         res.status(500).send("Error: "+err);
