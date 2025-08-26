@@ -8,22 +8,25 @@ const SubmissionHistory = ({ problemId }) => {
   const [selectedSubmission, setSelectedSubmission] = useState(null);
 
   useEffect(() => {
-    const fetchSubmissions = async () => {
-      try {
-        setLoading(true);
-        const response = await axiosClient.get(`/problem/getSubmittedSolution/${problemId}`);
-        setSubmissions(response.data);
-        setError(null);
-      } catch (err) {
-        setError('Failed to fetch submission history');
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchSubmissions = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosClient.get(`/problem/getSubmittedSolution/${problemId}`);
+      // Ensure submissions is always an array
+      setSubmissions(Array.isArray(response.data) ? response.data : []);
+      setError(null);
+    } catch (err) {
+      setError('Failed to fetch submission history');
+      console.error(err);
+      // Set submissions to empty array on error too
+      setSubmissions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchSubmissions();
-  }, [problemId]);
+  fetchSubmissions();
+}, [problemId]);
 
   const getStatusColor = (status) => {
     switch (status) {
