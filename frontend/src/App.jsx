@@ -5,9 +5,10 @@ import HomePage from "./pages/HomePage";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth } from "./authSlice";
 import { useEffect, useState } from "react";
-import AdminPanel from "./pages/AdminPanel"
-import ProblemPage from "./pages/ProblemPage";
-
+import AdminPanel from "./components/AdminPanel";
+import ProblemPage from "./pages/ProblemPage"
+import Admin from "./pages/Admin";
+import AdminDelete from "./components/AdminDelete"
 
 function App() {
   // checking prior that if the user is authenticated or not to directly navigate it to HomePage
@@ -26,7 +27,7 @@ function App() {
     };
     checkAuthentication();
   }, [dispatch]);
- // we have put dispatch in dependency array so that checkauth runs only once, as it will have either true or false
+  // we have put dispatch in dependency array so that checkauth runs only once, as it will have either true or false
 
   if (loading || isCheckingAuth) {
     return (
@@ -53,13 +54,33 @@ function App() {
           path="/signup"
           element={isAuthenticated ? <Navigate to="/" /> : <SignUp></SignUp>}
         ></Route>
-        <Route path="/problem/:problemId" element={<ProblemPage/>}></Route>
+        <Route
+          path="/admin/create"
+          element={
+            isAuthenticated && user?.role === "admin" ? (
+              <AdminPanel />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/admin/delete"
+          element={
+            isAuthenticated && user?.role === "admin" ? (
+              <AdminDelete />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route path="/problem/:problemId" element={<ProblemPage />}></Route>
         {/* <Route path="/admin" element={<AdminPanel/>}></Route> */}
         <Route
           path="/admin"
           element={
             isAuthenticated && user?.role === "admin" ? (
-              <AdminPanel />
+              <Admin />
             ) : (
               <Navigate to="/" />
             )

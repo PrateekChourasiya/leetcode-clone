@@ -24,6 +24,8 @@ const createProblem = async (req, res) => {
                 stdin: testcase.input,
                 expected_output: testcase.output
             }));
+
+            
             
             // this will give an array of objects of token, each token correspond to each submission in a batch
             // a token is an exchange for the suubmission of our code, by using this token, we can get the status of the submitted code 
@@ -31,6 +33,8 @@ const createProblem = async (req, res) => {
             
             // converting an array of actual token
             const resultTokens = submitResult.map((value) => value.token);
+
+            console.log("Hello");
 
             // getting the result of our submitted code
             const testResult = await submitTokens(resultTokens);
