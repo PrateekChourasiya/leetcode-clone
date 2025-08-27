@@ -34,7 +34,7 @@ const createProblem = async (req, res) => {
             // converting an array of actual token
             const resultTokens = submitResult.map((value) => value.token);
 
-            console.log("Hello");
+            // console.log("Hello");
 
             // getting the result of our submitted code
             const testResult = await submitTokens(resultTokens);
