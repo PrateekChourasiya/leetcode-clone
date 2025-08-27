@@ -11,7 +11,21 @@ const aiRouter = require("./routes/aiChatting")
 const cors = require('cors')
 
 
-app.use(cors())
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://codeitup-three.vercel.app",
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // allow request
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 
