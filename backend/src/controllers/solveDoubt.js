@@ -82,9 +82,9 @@ You are an expert Data Structures and Algorithms (DSA) tutor specializing in hel
 
 Remember: Your goal is to help users learn and understand DSA concepts through the lens of the current problem, not just to provide quick answers.
 `},
-thinkingConfig: {
-        thinkingBudget: -1, // Disable thinking with 0, enable with -1
-      },
+// thinkingConfig: {
+//         thinkingBudget: -1, // Disable thinking with 0, enable with -1
+//       },
     });
      
     res.status(201).json({
