@@ -6,7 +6,6 @@ import { useNavigate, NavLink } from 'react-router';
 import { loginUser } from "../authSlice";
 import { useEffect, useState } from 'react';
 
-
 const loginSchema = z.object({
   emailId: z.string().email("Invalid Email"),
   password: z.string().min(8, "Password is too weak") 
@@ -21,7 +20,7 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(loginSchema) }); // Using renamed schema
+  } = useForm({ resolver: zodResolver(loginSchema) });
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -34,42 +33,78 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-base-200"> {/* Added bg for contrast */}
-      <div className="card w-96 bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title justify-center text-3xl mb-6">CodeItUp</h2> {/* Added mb-6 */}
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-900 to-slate-800">
+      <div className="card w-full max-w-md bg-slate-800/70 backdrop-blur-md shadow-2xl border border-slate-700/50 rounded-xl overflow-hidden">
+        <div className="card-body p-8">
+          {/* Header with logo */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl shadow-lg mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">CodeItUp</h2>
+            <p className="text-slate-400 mt-2">Welcome back! Please login to your account</p>
+          </div>
 
-          
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control"> {/* Removed mt-4 from first form-control for tighter spacing to title or global error */}
-              <label className="label"> {/* Removed mb-1, default spacing should be fine */}
-                <span className="label-text">Email</span>
+          {/* Display server error if exists */}
+          {error && (
+            <div className="alert alert-error bg-red-900/30 text-red-400 border-red-800 mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Email Field */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text text-slate-300">Email</span>
               </label>
-              <input
-                type="email"
-                placeholder="john@example.com"
-                className={`input input-bordered w-full ${errors.emailId ? 'input-error' : ''}`} 
-                {...register('emailId')}
-              />
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder="john@example.com"
+                  className={`input input-bordered w-full bg-slate-700/50 border-slate-600 text-white placeholder-slate-400 focus:bg-slate-700/70 focus:border-blue-500 transition-all duration-300 ${
+                    errors.emailId ? 'input-error border-2' : ''
+                  }`}
+                  {...register('emailId')}
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+              </div>
               {errors.emailId && (
-                <span className="text-error text-sm mt-1">{errors.emailId.message}</span>
+                <div className="flex items-center mt-2 text-error">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">{errors.emailId.message}</span>
+                </div>
               )}
             </div>
 
-            <div className="form-control mt-4">
+            {/* Password Field with Toggle */}
+            <div className="form-control">
               <label className="label">
-                <span className="label-text">Password</span>
+                <span className="label-text text-slate-300">Password</span>
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className={`input input-bordered w-full pr-10 ${errors.password ? 'input-error' : ''}`}
+                  className={`input input-bordered w-full bg-slate-700/50 border-slate-600 text-white placeholder-slate-400 focus:bg-slate-700/70 focus:border-blue-500 transition-all duration-300 pr-12 ${
+                    errors.password ? 'input-error border-2' : ''
+                  }`}
                   {...register('password')}
                 />
                 <button
                   type="button"
-                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute top-1/2 right-3 transform -translate-y-1/2 text-slate-400 hover:text-blue-400 transition-colors duration-300 p-1"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
@@ -86,30 +121,44 @@ function Login() {
                 </button>
               </div>
               {errors.password && (
-                <span className="text-error text-sm mt-1">{errors.password.message}</span>
+                <div className="flex items-center mt-2 text-error">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">{errors.password.message}</span>
+                </div>
               )}
             </div>
 
-            <div className="form-control mt-8 flex justify-center">
+            {/* Submit Button */}
+            <div className="form-control mt-8">
               <button
                 type="submit"
-                className={`btn btn-primary ${loading ? 'loading btn-disabled' : ''}`} // Added btn-disabled for better UX with loading
+                className={`btn w-full bg-gradient-to-r from-blue-500 to-purple-600 border-0 text-white hover:opacity-90 transition-all duration-300 transform hover:-translate-y-1 shadow-lg ${
+                  loading ? 'loading' : ''
+                }`}
                 disabled={loading}
               >
                 {loading ? (
+                  <span>Logging in...</span>
+                ) : (
                   <>
-                    <span className="loading loading-spinner"></span>
-                    Logging in...
+                    <span>Login</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
                   </>
-                ) : 'Login'}
+                )}
               </button>
             </div>
           </form>
-          <div className="text-center mt-6">
-            <span className="text-sm">
-              Don't have an account?{' '} {/* Adjusted text slightly */}
-              <NavLink to="/signup" className="link link-primary">
-                Sign Up
+
+          {/* Sign Up Redirect */}
+          <div className="text-center mt-8 pt-6 border-t border-slate-700/50">
+            <span className="text-sm text-slate-400">
+              Don't have an account?{' '}
+              <NavLink to="/signup" className="font-medium text-blue-400 hover:text-blue-300 transition-colors duration-300">
+                Sign Up Now
               </NavLink>
             </span>
           </div>
