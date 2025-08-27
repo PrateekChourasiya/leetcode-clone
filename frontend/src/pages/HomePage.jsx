@@ -75,7 +75,7 @@ function HomePage() {
             <div className="dropdown dropdown-end">
               <div tabIndex={0} className="avatar placeholder cursor-pointer hover:opacity-80 transition-opacity">
                 <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full w-10 h-10 flex items-center justify-center">
-                  <span className="font-bold">{user?.firstName?.charAt(0)}</span>
+                  <span className="font-bold flex justify-center mt-2">{user?.firstName?.charAt(0)}</span>
                 </div>
               </div>
               
