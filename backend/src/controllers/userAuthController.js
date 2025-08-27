@@ -5,6 +5,8 @@ const validate = require('../utils/validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const {isProduction} = require('../config/config')
+
 
 const register = async (req, res) => {
     try{
@@ -27,7 +29,13 @@ const register = async (req, res) => {
             role: user.role,
         };
 
-        res.cookie('token', token, {maxAge: 60*60*1000}); // here maxAge takes time in miliseconds, so we gave time accordingly
+        res.cookie('token', token, {
+            maxAge: 60*60*1000,
+              httpOnly: true,           // keep it safe from JS
+              secure: isProduction,     // true on Vercel, false locally
+              sameSite: "none",         // required for cross-site
+              path: "/",                // allow everywhere
+        }); // here maxAge takes time in miliseconds, so we gave time accordingly
         res.status(201).json({
             user: reply,
             meassage: "user registered successfully."
@@ -65,7 +73,13 @@ const login = async (req, res) => {
         };
 
         const token = jwt.sign({_id: user._id, emailId: emailId, role:user.role}, process.env.JWT_KEY, {expiresIn: 60*60});
-        res.cookie('token', token, {maxAge: 60*60*1000});
+        res.cookie('token', token, {
+            maxAge: 60*60*1000,
+              httpOnly: true,           // keep it safe from JS
+              secure: isProduction,     // true on Vercel, false locally
+              sameSite: "none",         // required for cross-site
+              path: "/",                // allow everywhere            
+        });
 
         res.status(201).json({
             user: reply,
@@ -89,7 +103,13 @@ const logout = async (req, res) => {
         await redisClient.expireAt(`token:${token}`, payload.exp);
         
         // delete the cookies
-        res.cookie("token", null, {expires: new Date(Date.now())});
+        res.cookie("token", "", {
+            httpOnly: true,
+            secure: isProduction,
+            sameSite: "none",
+            path: "/",
+            expires: new Date(0)
+        });        
         res.send("Logged out successfully");
     }
     catch(err){
@@ -110,7 +130,13 @@ const adminRegister = async (req, res) => {
         const user = await User.create(req.body);
 
         const token = jwt.sign({_id: user._id, emailId: emailId, role:user.role}, process.env.JWT_KEY, {expiresIn: 60*60}); // expiresIn takes time in seconds, so we gave 1 hr
-        res.cookie('token', token, {maxAge: 60*60*1000}); // here maxAge takes time in miliseconds, so we gave time accordingly
+        res.cookie('token', token, {
+            maxAge: 60*60*1000,
+              httpOnly: true,           // keep it safe from JS
+              secure: isProduction,     // true on Vercel, false locally
+              sameSite: "none",         // required for cross-site
+              path: "/",                // allow everywhere            
+        }); // here maxAge takes time in miliseconds, so we gave time accordingly
         res.status(201).json("User Registered Successfully");
 
     }catch(err){
