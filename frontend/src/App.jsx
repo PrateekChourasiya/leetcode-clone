@@ -9,6 +9,8 @@ import AdminPanel from "./components/AdminPanel";
 import ProblemPage from "./pages/ProblemPage"
 import Admin from "./pages/Admin";
 import AdminDelete from "./components/AdminDelete"
+import AdminUpdateList from "./components/AdminUpdateList";
+import AdminUpdate from "./components/AdminUpdate";
 
 function App() {
   // checking prior that if the user is authenticated or not to directly navigate it to HomePage
@@ -54,6 +56,26 @@ function App() {
           path="/signup"
           element={isAuthenticated ? <Navigate to="/" /> : <SignUp></SignUp>}
         ></Route>
+        <Route
+          path="/admin/update"
+          element={
+            isAuthenticated && user?.role === "admin" ? (
+              <AdminUpdateList />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
+        <Route
+          path="/admin/update/:id"
+          element={
+            isAuthenticated && user?.role === "admin" ? (
+              <AdminUpdate />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
         <Route
           path="/admin/create"
           element={

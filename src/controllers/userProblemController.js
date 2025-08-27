@@ -150,7 +150,7 @@ const getProblemById = async (req, res) => {
             return res.status(400).send("ID is Missing");
         }
 
-        const getProblem = await Problem.findById(id).select("_id title difficulty description tags visibleTestCases startCode referenceSolution"); // .select(" ") is used to select only those fields from the document ehich we want to show on frontend, we can also exclude some fields which we dont want to show by a - that is .select("-hiddenTestCases"), rest will be listed, but either inclusion or exclusion can be done at a time
+        const getProblem = await Problem.findById(id).select("_id title difficulty description tags visibleTestCases hiddenTestCases startCode referenceSolution"); // .select(" ") is used to select only those fields from the document ehich we want to show on frontend, we can also exclude some fields which we dont want to show by a - that is .select("-hiddenTestCases"), rest will be listed, but either inclusion or exclusion can be done at a time
 
         if(!getProblem){
             return res.status(404).send("Problem is Missing");

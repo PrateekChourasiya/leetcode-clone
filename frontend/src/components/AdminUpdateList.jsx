@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import axiosClient from '../utils/axiosClient'
+import { useNavigate } from 'react-router';
+import axiosClient from '../utils/axiosClient';
 
-const AdminDelete = () => {
+const AdminUpdateList = () => {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProblems();
@@ -24,18 +25,9 @@ const AdminDelete = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this problem?')) return;
-    
-    try {
-      await axiosClient.delete(`/problem/delete/${id}`);
-      setProblems(problems.filter(problem => problem._id !== id));
-    } catch (err) {
-      setError('Failed to delete problem');
-      console.error(err);
-    }
+  const handleUpdate = (id) => {
+    navigate(`/admin/update/${id}`);
   };
-
 
   if (loading) {
     return (
@@ -61,7 +53,7 @@ const AdminDelete = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Delete Problems</h1>
+        <h1 className="text-3xl font-bold">Update Problems</h1>
       </div>
 
       <div className="overflow-x-auto">
@@ -99,10 +91,10 @@ const AdminDelete = () => {
                 <td>
                   <div className="flex space-x-2">
                     <button 
-                      onClick={() => handleDelete(problem._id)}
-                      className="btn btn-sm btn-error"
+                      onClick={() => handleUpdate(problem._id)}
+                      className="btn btn-sm btn-primary"
                     >
-                      Delete
+                      Update
                     </button>
                   </div>
                 </td>
@@ -115,4 +107,4 @@ const AdminDelete = () => {
   );
 };
 
-export default AdminDelete;
+export default AdminUpdateList;
