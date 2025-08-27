@@ -21,7 +21,10 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true); // allow request
     } else {
-      callback(new Error("Not allowed by CORS"));
+    //   callback(new Error("Not allowed by CORS"));
+
+        // Still allow request.
+        callback(null, true); // allow request
     }
   }
 }));
