@@ -18,15 +18,15 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // allow request
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
     } else {
-    //   callback(new Error("Not allowed by CORS"));
-
-        // Still allow request.
-        callback(null, true); // allow request
+      callback(new Error("Not allowed by CORS"));
     }
-  }
+  },
+  credentials: true // <--- important
+  //When credentials are used, CORS rules are stricter:
+  //You must explicitly set Access-Control-Allow-Credentials: true.
 }));
 
 app.use(express.json());
