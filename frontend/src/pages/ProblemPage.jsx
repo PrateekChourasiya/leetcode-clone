@@ -294,7 +294,8 @@ const ProblemPage = () => {
                   <div className="prose max-w-none text-gray-300">
                     <h2 className="text-xl font-bold mb-4 text-white">Editorial</h2>
                     <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                      Editorial content will be available after you solve the problem.
+                      {/* Editorial content will be available after you solve the problem. */}
+                      <embed type = 'video/webm' src = 'https://youtu.be/KLlXCFG5TnA?feature=shared' width = '400' height = '300'></embed>
                     </div>
                   </div>
                 )}
