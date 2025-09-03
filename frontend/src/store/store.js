@@ -5,9 +5,9 @@ export const store = configureStore({
   reducer: {
     auth: authReducer
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: false, // <- disables the check globally (not recommended)
-  //   }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false, // <- disables the check globally (not recommended)
+    }),
 });
 
