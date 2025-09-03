@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import Editor from '@monaco-editor/react';
-import { useParams, NavLink } from 'react-router';
+import { useParams, NavLink, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import axiosClient from "../utils/axiosClient";
 import SubmissionHistory from "../components/SubmissionHistory";
@@ -16,6 +16,7 @@ const langMap = {
 
 const ProblemPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { user } = useSelector((state) => state.auth);
   const [problem, setProblem] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState('javascript');
@@ -32,6 +33,7 @@ const ProblemPage = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
+    navigate('/signup');
   };
 
   useEffect(() => {
