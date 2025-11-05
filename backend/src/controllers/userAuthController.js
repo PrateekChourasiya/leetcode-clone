@@ -1,4 +1,4 @@
-const redisClient = require('../config/redis');
+// const redisClient = require('../config/redis');
 const Submission = require('../models/submission');
 const User = require('../models/user');
 const validate = require('../utils/validator');
@@ -99,8 +99,8 @@ const logout = async (req, res) => {
         const payload = jwt.decode(token);
 
         // add the token into redis blocklist to avoid logging in again with that token
-        await redisClient.set(`token:${token}`, 'BLOCKED');
-        await redisClient.expireAt(`token:${token}`, payload.exp);
+        // await redisClient.set(`token:${token}`, 'BLOCKED');
+        // await redisClient.expireAt(`token:${token}`, payload.exp);
         
         // delete the cookies
         res.cookie("token", "", {
