@@ -1,15 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosClient from './utils/axiosClient'
+import axiosClient from './utils/axiosClient';
 
 // helper to extract a serializable error payload from Axios error
 const getSerializableError = (error) => {
-  // If the server returned a structured JSON error, prefer that
   if (error && error.response && error.response.data) return error.response.data;
-
-  // Fallback to a plain object with message
   if (error && error.message) return { message: error.message };
-
-  // ultimate fallback
   return { message: 'Something went wrong' };
 };
 
@@ -17,7 +12,7 @@ export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData, { rejectWithValue }) => {
     try {
-      const response =  await axiosClient.post('/user/register', userData);
+      const response = await axiosClient.post('/user/register', userData, { withCredentials: true }); // ✅ added
       return response.data.user;
     } catch (error) {
       return rejectWithValue(getSerializableError(error));
@@ -25,12 +20,11 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-
 export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.post('/user/login', credentials);
+      const response = await axiosClient.post('/user/login', credentials, { withCredentials: true }); // ✅ added
       return response.data.user;
     } catch (error) {
       return rejectWithValue(getSerializableError(error));
@@ -42,7 +36,7 @@ export const checkAuth = createAsyncThunk(
   'auth/check',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await axiosClient.get('/user/check');
+      const { data } = await axiosClient.get('/user/check', { withCredentials: true }); // ✅ added
       return data.user;
     } catch (error) {
       return rejectWithValue(getSerializableError(error));
@@ -54,7 +48,7 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
-      await axiosClient.post('/user/logout');
+      await axiosClient.post('/user/logout', {}, { withCredentials: true }); // ✅ added
       return null;
     } catch (error) {
       return rejectWithValue(getSerializableError(error));
@@ -70,29 +64,25 @@ const authSlice = createSlice({
     loading: false,
     error: null
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      // Register User Cases
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = !!action.payload; // by default we want this to be true, so when data/action.payload comes and its ! is taken, its becomes false, and again ! makes it true but when action.payload is null, that is we didnt get any data from backend of user, then doing its ! on null makes it true, and again ! makes it false, which we want as it has to be false when we have no data of user
+        state.isAuthenticated = !!action.payload;
         state.user = action.payload;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
-        // action.payload is now guaranteed to be a serializable object from rejectWithValue
         state.error = action.payload?.message || 'Something went wrong';
         state.isAuthenticated = false;
         state.user = null;
       })
-  
-      // Login User Cases
+
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -108,8 +98,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-  
-      // Check Auth Cases
+
       .addCase(checkAuth.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -125,8 +114,7 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
       })
-  
-      // Logout User Cases
+
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
         state.error = null;
