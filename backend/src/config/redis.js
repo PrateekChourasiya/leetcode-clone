@@ -1,6 +1,6 @@
 const { createClient } = require('redis');
 
-const client = createClient({
+const redisClient = createClient({
     username: 'default',
     password: process.env.REDIS_PASS,
     socket: {
@@ -9,12 +9,12 @@ const client = createClient({
     }
 });
 
-client.on('error', err => console.log('Redis Client Error', err));
+redisClient.on('error', err => console.log('Redis Client Error', err));
 
 (async () => {
-    await client.connect();
+    await redisClient.connect();
 
-    await client.set('foo', 'bar');
-    const result = await client.get('foo');
+    await redisClient.set('foo', 'bar');
+    const result = await redisClient.get('foo');
     console.log(result);  // >>> bar
 })();
