@@ -1,4 +1,4 @@
-const {createClient} = require('redis');
+const { createClient } = require('redis');
 
 const redisClient = createClient({
     username: 'default',
@@ -9,5 +9,14 @@ const redisClient = createClient({
     }
 });
 
+redisClient.on('error', err => console.log('Redis Client Error', err));
+
+(async () => {
+    await redisClient.connect();
+
+    await redisClient.set('foo', 'bar');
+    const result = await redisClient.get('foo');
+    console.log(result);  // >>> bar
+})();
 
 module.exports = redisClient;
