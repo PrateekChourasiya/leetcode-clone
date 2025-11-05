@@ -21,8 +21,8 @@ function HomePage() {
       setIsLoading(true);
       try {
         const [problemsResponse, solvedResponse] = await Promise.all([
-          axiosClient.get('/problem/getAllProblems'),
-          user ? axiosClient.get('/problem/getAllProblemsSolvedByUser') : Promise.resolve({ data: [] })
+          axiosClient.get('/problem/getAllProblems', { withCredentials: true }), // ✅ added
+          user ? axiosClient.get('/problem/getAllProblemsSolvedByUser', { withCredentials: true }) : Promise.resolve({ data: [] }) // ✅ added
         ]);
         
         setProblems(problemsResponse.data);
