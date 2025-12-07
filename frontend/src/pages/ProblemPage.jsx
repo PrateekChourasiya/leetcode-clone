@@ -40,7 +40,7 @@ const ProblemPage = () => {
     const fetchProblem = async () => {
       setLoading(true);
       try {
-        const response = await axiosClient.get(`/problem/problemById/${problemId}`, { withCredentials: true });
+        const response = await axiosClient.get(`/problem/problemById/${problemId}`);
         const initialCode = response.data.startCode.find(sc => sc.language === langMap[selectedLanguage]).initialCode;
 
         setProblem(response.data);
@@ -79,7 +79,7 @@ const ProblemPage = () => {
     setRunResult(null);
     
     try {
-      const response = await axiosClient.post(`/submission/run/${problemId}`, { withCredentials: true }, {
+      const response = await axiosClient.post(`/submission/run/${problemId}`, {
         code,
         language: selectedLanguage
       });
@@ -103,7 +103,7 @@ const ProblemPage = () => {
     setSubmitResult(null);
     
     try {
-      const response = await axiosClient.post(`/submission/submit/${problemId}`, { withCredentials: true }, {
+      const response = await axiosClient.post(`/submission/submit/${problemId}`, {
         code: code,
         language: selectedLanguage
       });
