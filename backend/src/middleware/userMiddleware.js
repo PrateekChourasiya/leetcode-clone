@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const redisClient = require('../config/redis');
+// const redisClient = require('../config/redis');
 
 const userMiddleware = async (req, res, next) => {
 
     try {
         const {token} = req.cookies;
+        console.log(token);
+        
         if(!token) {
             throw new Error("Token is absent");
         }
@@ -26,7 +28,8 @@ const userMiddleware = async (req, res, next) => {
 
         // whether the user is present in redis blocklist or not
 
-        const isBlocked = await redisClient.exists(`token:${token}`);
+        // const isBlocked = await redisClient.exists(`token:${token}`);
+        const isBlocked = false; // --- IGNORE ---
 
         if(isBlocked){
             throw new Error("Invalid Token");

@@ -4,7 +4,7 @@ require('dotenv').config();
 const main = require('./config/db');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/userAuth');
-const redisClient = require('./config/redis');
+// const redisClient = require('./config/redis');
 const problemRouter = require('./routes/problemSetter');
 const submitRouter = require('./routes/submit');
 const aiRouter = require("./routes/aiChatting")
@@ -13,6 +13,7 @@ const cors = require('cors')
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:5173",
   "https://codeitup-three.vercel.app",
 ];
 
@@ -44,7 +45,7 @@ app.get('/test',(req,res)=>{
 
 const initializeConnection = async () => {
     try{
-        await Promise.all([main(), redisClient.connect()]);
+        await Promise.all([main()]);
         console.log("DB Connected");
 
         app.listen(process.env.PORT, ()=>{

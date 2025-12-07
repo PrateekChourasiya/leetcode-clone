@@ -1,5 +1,5 @@
 const redisClient = require('../config/redis');
-const Submission = require('../models/submission');
+// const Submission = require('../models/submission');
 const User = require('../models/user');
 const validate = require('../utils/validator');
 const bcrypt = require('bcrypt');
@@ -33,7 +33,7 @@ const register = async (req, res) => {
             maxAge: 60*60*1000,
               httpOnly: true,           // keep it safe from JS
               secure: isProduction,     // true on Vercel, false locally
-              sameSite: "none",         // required for cross-site
+            sameSite: isProduction ? "none" : "lax",
               path: "/",                // allow everywhere
         }); // here maxAge takes time in miliseconds, so we gave time accordingly
         res.status(201).json({
@@ -77,7 +77,7 @@ const login = async (req, res) => {
             maxAge: 60*60*1000,
               httpOnly: true,           // keep it safe from JS
               secure: isProduction,     // true on Vercel, false locally
-              sameSite: "none",         // required for cross-site
+            sameSite: isProduction ? "none" : "lax",
               path: "/",                // allow everywhere            
         });
 
@@ -99,8 +99,8 @@ const logout = async (req, res) => {
         const payload = jwt.decode(token);
 
         // add the token into redis blocklist to avoid logging in again with that token
-        await redisClient.set(`token:${token}`, 'BLOCKED');
-        await redisClient.expireAt(`token:${token}`, payload.exp);
+        // await redisClient.set(`token:${token}`, 'BLOCKED');
+        // await redisClient.expireAt(`token:${token}`, payload.exp);
         
         // delete the cookies
         res.cookie("token", "", {
