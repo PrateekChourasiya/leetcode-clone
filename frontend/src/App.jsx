@@ -11,6 +11,10 @@ import Admin from "./pages/Admin";
 import AdminDelete from "./components/AdminDelete"
 import AdminUpdateList from "./components/AdminUpdateList";
 import AdminUpdate from "./components/AdminUpdate";
+import ContestHomePage from "./pages/ContestHomePage";
+import AdminCreateContest from "./components/AdminCreateContest";
+import ContestPage from "./pages/ContestPage";
+import LoggedInLayout from "./components/layouts/LoggedInLayout";
 
 function App() {
   // checking prior that if the user is authenticated or not to directly navigate it to HomePage
@@ -93,6 +97,16 @@ function App() {
             )
           }
         />
+        <Route
+          path="/admin/create-contest"
+          element={
+            isAuthenticated && user?.role === "admin" ? (
+              <AdminCreateContest />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
         <Route path="/problem/:problemId" element={<ProblemPage />}></Route>
         {/* <Route path="/admin" element={<AdminPanel/>}></Route> */}
         <Route
@@ -105,6 +119,11 @@ function App() {
             )
           }
         ></Route>
+        <Route element={isAuthenticated ? <LoggedInLayout /> : <Navigate to="/signup" />}>
+            <Route path="/contests" element={<ContestHomePage />} />
+            <Route path="/contest/:id"element={<ContestPage/>}></Route>      
+        </Route>
+               
       </Routes>
     </>
   );

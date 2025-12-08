@@ -32,7 +32,16 @@ function Admin() {
       color: 'btn-error',
       bgColor: 'bg-error/10',
       route: '/admin/delete'
-    }
+    },
+    {
+      id: 'create-contest',
+      title: 'Create Contest',
+      description: 'Organize a new coding contest',
+      icon: Home,
+      color: 'btn-primary',
+      bgColor: 'bg-primary/10',
+      route: '/admin/create-contest'
+    },
   ];
 
   return (
