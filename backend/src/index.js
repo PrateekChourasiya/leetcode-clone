@@ -8,6 +8,7 @@ const authRouter = require('./routes/userAuth');
 const problemRouter = require('./routes/problemSetter');
 const submitRouter = require('./routes/submit');
 const aiRouter = require("./routes/aiChatting")
+const contestRouter = require('./routes/contestRoute');
 const cors = require('cors')
 
 
@@ -19,7 +20,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (allowedOrigins.includes(origin)) {
+    if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -37,6 +38,7 @@ app.use('/user',authRouter);
 app.use('/problem',problemRouter);
 app.use('/submission',submitRouter);
 app.use('/ai',aiRouter);
+app.use('/contest',contestRouter);
 
 app.get('/test',(req,res)=>{
     res.send("Hello from Backend");
