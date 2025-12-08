@@ -10,9 +10,12 @@ export const userDataApi = createApi({
     getSolvedProblemsByUser: builder.query({
       query: () => `/problem/getAllProblemsSolvedByUser`,
     }),
+    getContestSolvedProblemsByUser: builder.query({
+      query: (contestId) => `/contest/${contestId}/solved-problems`,
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetSolvedProblemsByUserQuery } = userDataApi
+export const { useGetSolvedProblemsByUserQuery , useGetContestSolvedProblemsByUserQuery } = userDataApi

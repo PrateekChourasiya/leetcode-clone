@@ -14,7 +14,7 @@ const getDifficultyBadgeColor = (difficulty) => {
     }
 };
 
-function ProblemCard({ problem, solvedProblems }) {
+function ProblemCard({ problem, solvedProblems , isContestProblem= false , contestId = ""}) {
     return (
         <div
             key={problem._id}
@@ -25,7 +25,7 @@ function ProblemCard({ problem, solvedProblems }) {
                     <div className="flex-1">
                         <h2 className="card-title text-lg md:text-xl mb-2">
                             <NavLink
-                                to={`/problem/${problem._id}`}
+                                to={isContestProblem ? `/contest/${contestId}/problem/${problem._id}` : `/problem/${problem._id}`}
                                 className="hover:text-blue-400 transition-colors"
                             >
                                 {problem.title}

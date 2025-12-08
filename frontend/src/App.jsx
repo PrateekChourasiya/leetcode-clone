@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
@@ -15,6 +15,7 @@ import ContestHomePage from "./pages/ContestHomePage";
 import AdminCreateContest from "./components/AdminCreateContest";
 import ContestPage from "./pages/ContestPage";
 import LoggedInLayout from "./components/layouts/LoggedInLayout";
+import ContestProblemPage from "./pages/ContestProblemPage";
 
 function App() {
   // checking prior that if the user is authenticated or not to directly navigate it to HomePage
@@ -121,8 +122,16 @@ function App() {
         ></Route>
         <Route element={isAuthenticated ? <LoggedInLayout /> : <Navigate to="/signup" />}>
             <Route path="/contests" element={<ContestHomePage />} />
-            <Route path="/contest/:id"element={<ContestPage/>}></Route>      
+            <Route path="/contest/:id"element={<ContestPage/>}></Route>
         </Route>
+
+        <Route element={isAuthenticated ? <Outlet /> : <Navigate to="/signup" />}>
+          <Route
+            path="/contest/:id/problem/:problemId"
+            element={<ContestProblemPage />}
+          />
+        </Route>
+
                
       </Routes>
     </>

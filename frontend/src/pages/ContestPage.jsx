@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useGetSolvedProblemsByUserQuery } from "../services/userDataService";
+import { useGetContestSolvedProblemsByUserQuery, useGetSolvedProblemsByUserQuery } from "../services/userDataService";
 import { useGetContestDataQuery } from "../services/contestDataService";
 import { useParams } from "react-router";
 import ProblemCard from "../components/block-components/ProblemCard";
 
 export default function ContestPage() {
   const { id } = useParams();
-  const { data: solvedProblems } = useGetSolvedProblemsByUserQuery();
-  const { data: contest, isLoading, error } = useGetContestDataQuery(id);
+  const { data: solvedProblems , error , isLoading} = useGetContestSolvedProblemsByUserQuery(id);
+  const { data: contest , isLoading : contestLoading } = useGetContestDataQuery(id);
 
   const [timer, setTimer] = useState("--:--:--");
 
@@ -53,15 +53,15 @@ export default function ContestPage() {
   }, [contest, status]);
 
   // UI states
-  if (isLoading) return <p className="text-center py-10 text-gray-400">Loading...</p>;
-  if (error) return <p className="text-center text-red-500">Failed to load contest</p>;
+  if (isLoading || contestLoading) return <p className="text-center py-10 text-gray-400">Loading...</p>;
+  if (error) return <p className="text-center text-red-500">{JSON.stringify(error)}</p>;
 
   return (
     <div className="max-w-6xl mx-auto px-5 py-10 text-gray-200">
 
       {/* HEADER */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">{contest.name}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{contest?.name}</h1>
 
         <div className="flex items-center gap-4 mt-3">
 
@@ -107,15 +107,19 @@ export default function ContestPage() {
       {/* PROBLEMS LIST */}
       <h2 className="text-xl font-semibold mb-3">Problems</h2>
 
-      <div className="space-y-4">
+      {contest.status === "upcoming" ? <>
+      This is an upcoming contest</> : <>
+            <div className="space-y-4">
         {contest.problems.map((problem) => (
           <ProblemCard
             key={problem._id}
             problem={problem}
             solvedProblems={solvedProblems}
+            isContestProblem={contest.status=="finished" ? false : true}
+            contestId={contest.status=="finished" ? "" : contest._id }
           />
         ))}
-      </div>
+      </div></>}
     </div>
   );
 }
