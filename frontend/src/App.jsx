@@ -16,6 +16,7 @@ import AdminCreateContest from "./components/AdminCreateContest";
 import ContestPage from "./pages/ContestPage";
 import LoggedInLayout from "./components/layouts/LoggedInLayout";
 import ContestProblemPage from "./pages/ContestProblemPage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 
 function App() {
   // checking prior that if the user is authenticated or not to directly navigate it to HomePage
@@ -124,6 +125,10 @@ function App() {
             <Route path="/contests" element={<ContestHomePage />} />
             <Route path="/contest/:id"element={<ContestPage/>}></Route>
         </Route>
+        <Route
+          path="/leaderboard"
+          element={isAuthenticated ? <LeaderboardPage /> : <Navigate to="/signup" />}
+        />
 
         <Route element={isAuthenticated ? <Outlet /> : <Navigate to="/signup" />}>
           <Route

@@ -44,6 +44,24 @@ function Navbar() {
   </NavLink>
 </div>
 
+<div className="flex flex-col justify-end mt-1 ">
+  <NavLink
+    to="/leaderboard"
+    className={({ isActive }) =>
+      `
+        text-md font-semibold tracking-wide px-3 py-1 rounded-md transition-all duration-300
+        ${
+          isActive
+            ? "bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent drop-shadow-md"
+            : "text-gray-400 hover:text-white hover:drop-shadow-[0_0_4px_rgba(180,180,255,0.4)]"
+        }
+      `
+    }
+  >
+    Leaderboard
+  </NavLink>
+</div>
+
 
 </div>
 
